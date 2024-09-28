@@ -84,21 +84,19 @@ def grafico_envolvente_convexa(puntos_de_control):
 
 ###### Punto 4 ######
 
-# Derivada de u(t)
-def u_prime(t):
+def u_derivada(t):
     return np.array([0, 1, 2 * t, 3 * t ** 2])
 
-# Derivada de x(t)
 def bezier_derivada1(t, G, MB):
-    return G.T @ MB @ u_prime(t)
+    return G.T @ MB @ u_derivada(t)
 
-# Derivada de u(t)
-def u_prime2(t):
+def u_derivada2(t):
     return np.array([0, 0, 2, 6*t])
 
-# Derivada de x(t)
 def bezier_derivada2(t, G, MB):
-    return G.T @ MB @ u_prime2(t)
+    return G.T @ MB @ u_derivada2(t)
+
+
 
 if __name__ == "__main__":
     ##PUNTO 1
@@ -171,23 +169,23 @@ if __name__ == "__main__":
     p1 = np.array([1, 3])
     p2 = np.array([3, 3])
     p3 = np.array([4, 0])
-    # Vector de puntos de control
-    vector_puntos_c = np.array([p0, p1, p2, p3])
+   
+    puntos_de_control = np.array([p0, p1, p2, p3])
 
-    # Matriz base de Bézier cúbica
+    # Matriz de Beizer
     MB = np.array([
         [1, 0, 0, 0],
         [-3, 3, 0, 0],
         [3, -6, 3, 0],
         [-1, 3, -3, 1]])
 
-    # ejemplo para t=0.5
+    # primer derivada
     t = 0.5
-    result = bezier_derivada1(t, vector_puntos_c, MB)
+    result = bezier_derivada1(t, puntos_de_control, MB)
     print(f"x'(t) en t={t}: {result}")
 
 
-    # ejemplo para t=0.5
+    # segunda derivada
     t = 0.5
-    result = bezier_derivada2(t, vector_puntos_c, MB)
+    result = bezier_derivada2(t, puntos_de_control, MB)
     print(f"x''(t) en t={t}: {result}")
