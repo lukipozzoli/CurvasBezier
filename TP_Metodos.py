@@ -50,6 +50,40 @@ def graficar_curva_bezier_cubic(t_values, puntos_de_control):
     plt.grid()
     plt.show()
 
+## Para el ej 5
+def graficar_dos_curvas_bezier_cubic(t_values, puntos_de_control_1, puntos_de_control_2):
+    # Primera curva de Bézier cúbica
+    bezier_curve1 = np.array([bezier_cubic(t, *puntos_de_control_1) for t in t_values])
+    
+    # Segunda curva de Bézier cúbica
+    bezier_curve2 = np.array([bezier_cubic(t, *puntos_de_control_2) for t in t_values])
+
+    plt.figure(figsize=(8, 6))
+    
+    # Graficar la primera curva
+    plt.plot(bezier_curve1[:, 0], bezier_curve1[:, 1], label='Curva de Bézier 1', color='blue')
+    plt.scatter(puntos_de_control_1[:, 0], puntos_de_control_1[:, 1], c='red', s=80)
+    plt.plot(puntos_de_control_1[:, 0], puntos_de_control_1[:, 1], 'ro--', label='Puntos de Control 1')
+
+    # Graficar la segunda curva
+    plt.plot(bezier_curve2[:, 0], bezier_curve2[:, 1], label='Curva de Bézier 2', color='green')
+    plt.scatter(puntos_de_control_2[:, 0], puntos_de_control_2[:, 1], c='purple', s=80)
+    plt.plot(puntos_de_control_2[:, 0], puntos_de_control_2[:, 1], 'go--', label='Puntos de Control 2')
+
+    # Etiquetar puntos de control para ambas curvas
+    for j, (x, y) in enumerate(puntos_de_control_1):
+        plt.text(x, y, f'p1{j}', color='red')
+    
+    for j, (x, y) in enumerate(puntos_de_control_2):
+        plt.text(x, y, f'p2{j}', color='green')
+
+    plt.title('Curvas de Bézier cúbicas unidas en p3')
+    plt.xlabel('X')
+    plt.ylabel('Y')
+    plt.legend()
+    plt.grid()
+    plt.show()
+
 def graficar_coeficientes_cubicos(t_values, coef_c0, coef_c1, coef_c2, coef_c3):
     plt.figure(figsize=(8, 6))
     plt.plot(t_values, coef_c0, label='Coeficiente de p0: (1-t)^3')
@@ -106,9 +140,9 @@ if __name__ == "__main__":
     p1 = np.array([1, 2])
     p2 = np.array([2, 0])
     puntos_de_control = np.array([p0, p1, p2])
-    t_values = np.linspace(0, 1, 100) #nos permite generar 100 valores de t asi la curva se grafica de manera mas suave
+    valorest = np.linspace(0, 1, 100) #nos permite generar 100 valores de t asi la curva se grafica de manera mas suave
     # Graficamos la curva de Bézier cuadrática
-    graficar_curva_bezier_cuadratica(t_values, puntos_de_control)
+    graficar_curva_bezier_cuadratica(valorest, puntos_de_control)
     # Despues lo saco para el informe, Explicación de la relación entre f0(t), f1(t) y g(t)
     print("\n### Explicación ###")
     print("La curva g(t) es una combinación de las curvas f0(t) y f1(t).")
@@ -127,18 +161,18 @@ if __name__ == "__main__":
     puntos_de_control_2 = np.array([p0, p1, p2, p3])
 
     # Graficar la curva de Bézier cúbica (inciso A)
-    graficar_curva_bezier_cubic(t_values, puntos_de_control_2)
+    graficar_curva_bezier_cubic(valorest, puntos_de_control_2)
 
     ## Inciso B: Calcular y graficar los coeficientes de los puntos de control
     coef_c0, coef_c1, coef_c2, coef_c3 = [], [], [], []
-    for t in t_values:
+    for t in valorest:
         c0, c1, c2, c3 = (1-t)**3, 3*(1-t)**2*t, 3*(1-t)*t**2, t**3
         coef_c0.append(c0)
         coef_c1.append(c1)
         coef_c2.append(c2)
         coef_c3.append(c3)
 
-    graficar_coeficientes_cubicos(t_values, coef_c0, coef_c1, coef_c2, coef_c3)
+    graficar_coeficientes_cubicos(valorest, coef_c0, coef_c1, coef_c2, coef_c3)
 
     # Calcular la suma de los coeficientes para valores específicos de t
     t_values_specific = [0.3, 0.5, 0.8]
@@ -154,7 +188,7 @@ if __name__ == "__main__":
 
     # Graficamos cada curva de Bézier cúbica
     for i, puntos_de_control in enumerate(puntos_de_control_aleatorios):
-        graficar_curva_bezier_cubic(t_values, puntos_de_control)
+        graficar_curva_bezier_cubic(valorest, puntos_de_control)
     
     ##PUNTO 3
     print("Generando envolvente convexa")
@@ -189,3 +223,18 @@ if __name__ == "__main__":
     t = 0.5
     result = bezier_derivada2(t, puntos_de_control, MB)
     print(f"x''(t) en t={t}: {result}")
+
+    #### EJERCICIO 5 ####
+    # Para hacer la funcion cubica agregamos un nuevo punto de control
+    p0 = np.array([0, 0])
+    p1 = np.array([1, 3])
+    p2 = np.array([3, 3])
+    p3 = np.array([4, 0])
+    p4 = np.array([5, 2])
+    p5 = np.array([3, 1])
+    p6 = np.array([6, 1])
+    puntos_de_control_3 = np.array([p0, p1, p2, p3])
+    puntos_de_control_4 = np.array([p3, p4, p5, p6])
+
+    # Graficar la curva de Bézier cúbica (inciso A)
+    graficar_dos_curvas_bezier_cubic(valorest, puntos_de_control_3, puntos_de_control_4)
